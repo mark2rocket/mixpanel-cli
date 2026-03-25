@@ -1,0 +1,143 @@
+# mixpanel-cli SKILL
+
+Agent-native Mixpanel CLI. JSON stdout, stderr 상태분리, 파이프라인 친화적.
+
+## 설치
+
+```bash
+# Phase 1 (기본 CLI — config, analytics, events, export)
+pip install mixpanel-cli
+
+# Phase 2 포함 (AI 자연어 쿼리)
+pip install mixpanel-cli[ai]
+
+# 전체
+pip install mixpanel-cli[all]
+```
+
+## 인증 설정
+
+### 대화형 (개발/로컬)
+```bash
+mixpanel config init
+# → username, secret, project_id, region 순서로 입력
+```
+
+### 환경변수 (CI/에이전트 권장)
+```bash
+export MIXPANEL_USERNAME="svc-account@123456.mixpanel.com"
+export MIXPANEL_SECRET="your-service-account-secret"
+export MIXPANEL_PROJECT_ID="123456"
+# config init 불필요
+```
+
+## 에이전트 핵심 패턴
+
+### 이벤트 분석 (JSON 직접 파이프)
+```bash
+mixpanel analytics insight \
+  --event "Sign Up" \
+  --from-date 2026-03-01 \
+  --to-date 2026-03-26 \
+  --quiet | jq '.values["Sign Up"]'
+```
+
+### 펀넬 분석
+```bash
+mixpanel analytics funnel \
+  --id 12345 \
+  --from-date 2026-03-01 \
+  --to-date 2026-03-26 \
+  --quiet
+```
+
+### Retention 분석
+```bash
+mixpanel analytics retention \
+  --event "Sign Up" \
+  --from-date 2026-03-01 \
+  --to-date 2026-03-26 \
+  --unit week \
+  --quiet
+```
+
+### 이벤트 목록 확인
+```bash
+mixpanel events list --quiet | jq '.[]'
+mixpanel events list --search "Purchase" --quiet
+mixpanel events properties --event "Purchase" --quiet
+```
+
+### Raw 데이터 Export
+```bash
+# 파일로 저장
+mixpanel export events \
+  --from-date 2026-03-01 \
+  --to-date 2026-03-26 \
+  --event-name "Purchase" \
+  --file events.jsonl
+
+# stdout 스트리밍 (30일 자동 청킹)
+mixpanel export events \
+  --from-date 2026-01-01 \
+  --to-date 2026-03-31 \
+  --quiet > all_events.jsonl
+```
+
+### 프로파일 관리
+```bash
+mixpanel config list --quiet
+mixpanel config show --profile prod --quiet
+mixpanel config set --key region --value eu
+mixpanel --profile staging analytics insight --event "Login" --from-date 2026-03-01 --to-date 2026-03-26
+```
+
+### 멀티 리전
+```bash
+mixpanel --region eu analytics insight --event "Sign Up" --from-date 2026-03-01 --to-date 2026-03-26
+```
+
+## 전역 플래그
+
+| 플래그 | 설명 |
+|-------|------|
+| `--profile <name>` | 사용할 프로파일 (기본: default) |
+| `--project-id <id>` | 프로젝트 ID 오버라이드 |
+| `--region us\|eu\|in` | 리전 오버라이드 |
+| `--quiet` | data 값만 JSON 출력 (파이프 친화) |
+| `--pretty` | JSON pretty print |
+| `--debug` | HTTP 요청/응답 디버그 출력 (stderr) |
+| `--timeout <seconds>` | HTTP 타임아웃 (기본 30초) |
+
+## 출력 형식
+
+모든 성공 응답:
+```json
+{"status": "ok", "data": {...}, "meta": {"query_time_ms": 120}}
+```
+
+모든 에러 응답 (stdout, 항상 유효한 JSON):
+```json
+{"status": "error", "code": "AUTH_ERROR", "message": "..."}
+```
+
+`--quiet` 플래그: `data` 값만 출력 (항상 유효한 JSON)
+
+## 에러 코드
+
+| 코드 | 의미 | 해결 |
+|-----|------|------|
+| `AUTH_ERROR` | 인증 실패 | `mixpanel config init` 재실행 또는 환경변수 확인 |
+| `PERMISSION_ERROR` | 권한 없음 | 프로젝트 접근 권한 확인 |
+| `NOT_FOUND` | 리소스 없음 | ID 확인 |
+| `RATE_LIMIT` | 요청 한도 초과 | 잠시 후 재시도 (자동 3회 재시도) |
+| `QUERY_ERROR` | 잘못된 쿼리 | 파라미터 검토 |
+| `PROFILE_NOT_FOUND` | 프로파일 없음 | `mixpanel config init` 실행 |
+
+## 에이전트 팁
+
+1. **항상 `--quiet` 사용** — 순수 JSON 데이터만 받아 파싱
+2. **환경변수로 인증** — CI/자동화 환경에서 `config init` 불필요
+3. **`--debug` 로 문제 진단** — HTTP 요청/응답을 stderr로 출력
+4. **export는 30일 자동 청킹** — 날짜 범위 제한 걱정 없음
+5. **에러 시 `.code` 필드** — `"AUTH_ERROR"`, `"QUERY_ERROR"` 등으로 원인 파악

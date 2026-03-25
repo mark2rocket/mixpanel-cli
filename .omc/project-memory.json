@@ -1,0 +1,113 @@
+{
+  "version": "1.0.0",
+  "lastScanned": 1774454521345,
+  "projectRoot": "/Users/kimsaeam/claudecode/cc-workground/mixpanel-cli",
+  "techStack": {
+    "languages": [
+      {
+        "name": "Python",
+        "version": null,
+        "confidence": "high",
+        "markers": [
+          "pyproject.toml"
+        ]
+      }
+    ],
+    "frameworks": [
+      {
+        "name": "pytest",
+        "version": null,
+        "category": "testing"
+      }
+    ],
+    "packageManager": null,
+    "runtime": null
+  },
+  "build": {
+    "buildCommand": null,
+    "testCommand": "pytest",
+    "lintCommand": "ruff check",
+    "devCommand": null,
+    "scripts": {}
+  },
+  "conventions": {
+    "namingStyle": null,
+    "importStyle": null,
+    "testPattern": null,
+    "fileOrganization": null
+  },
+  "structure": {
+    "isMonorepo": false,
+    "workspaces": [],
+    "mainDirectories": [
+      "tests"
+    ],
+    "gitBranches": null
+  },
+  "customNotes": [],
+  "directoryMap": {
+    "mixpanel_cli": {
+      "path": "mixpanel_cli",
+      "purpose": null,
+      "fileCount": 6,
+      "lastAccessed": 1774454521330,
+      "keyFiles": [
+        "__init__.py",
+        "constants.py",
+        "exceptions.py",
+        "main.py",
+        "models.py"
+      ]
+    },
+    "tests": {
+      "path": "tests",
+      "purpose": "Test files",
+      "fileCount": 2,
+      "lastAccessed": 1774454521331,
+      "keyFiles": [
+        "__init__.py",
+        "conftest.py"
+      ]
+    },
+    "tests/fixtures": {
+      "path": "tests/fixtures",
+      "purpose": "Test fixtures",
+      "fileCount": 0,
+      "lastAccessed": 1774454521332,
+      "keyFiles": []
+    }
+  },
+  "hotPaths": [
+    {
+      "path": "mixpanel_cli/commands/project.py",
+      "accessCount": 3,
+      "lastAccessed": 1774454577970,
+      "type": "file"
+    },
+    {
+      "path": "mixpanel_cli/commands/analytics.py",
+      "accessCount": 3,
+      "lastAccessed": 1774454579061,
+      "type": "file"
+    },
+    {
+      "path": "mixpanel_cli/commands/events.py",
+      "accessCount": 3,
+      "lastAccessed": 1774454579776,
+      "type": "file"
+    },
+    {
+      "path": "mixpanel_cli/commands/export.py",
+      "accessCount": 3,
+      "lastAccessed": 1774454580390,
+      "type": "file"
+    },
+    {
+      "path": "mixpanel_cli/commands/_utils.py",
+      "accessCount": 1,
+      "lastAccessed": 1774454551007,
+      "type": "file"
+    }
+  ],
+  "userDirectives": []
+}

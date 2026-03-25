@@ -1,0 +1,21 @@
+# mixpanel-cli Ralph Progress
+
+## Iteration 1 - 2026-03-26
+### Status: IN PROGRESS
+### Current Story: US-INIT
+
+### Learnings
+- Python 3.11.0 available at /Library/Frameworks/Python.framework/Versions/3.11/bin/python3
+- uv available at /Users/kimsaeam/.local/bin/uv
+- Project root: /Users/kimsaeam/claudecode/cc-workground/mixpanel-cli/
+- PRD.md and TODO.md already exist
+- Phase 1a focus: 공식 API만 (config, project, analytics, events, export)
+- Phase 1b: dashboard, lexicon (비공식 API, 검증 후)
+- Phase 2: ask, shell, watch (AI 레이어)
+
+### Key Decisions
+- Pydantic v2 (not dataclass)
+- Optional extras: [ai], [shell], [all]
+- No keyring file fallback
+- --from-date / --to-date (not --from)
+- formatter: --quiet outputs json.dumps(data), always valid JSON
