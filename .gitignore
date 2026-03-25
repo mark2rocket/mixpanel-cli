@@ -1,0 +1,35 @@
+# Python
+__pycache__/
+*.py[cod]
+*.pyo
+*.pyd
+*.egg-info/
+dist/
+build/
+.eggs/
+*.egg
+
+# Testing / Coverage
+.coverage
+.coverage.*
+htmlcov/
+.pytest_cache/
+.tox/
+
+# Virtual environments
+.venv/
+venv/
+env/
+
+# IDE
+.idea/
+.vscode/
+*.swp
+*.swo
+
+# OMC state (internal orchestration files)
+.omc/state/
+.omc/notepad.md
+
+# macOS
+.DS_Store
