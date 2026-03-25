@@ -1,0 +1,102 @@
+[
+  {
+    "query": "지난 달 Sign Up 이벤트 몇 건이야?",
+    "expected_command": "insight",
+    "expected_event": "Sign Up"
+  },
+  {
+    "query": "이번 주 Purchase 이벤트 일별 추이 보여줘",
+    "expected_command": "insight",
+    "expected_event": "Purchase"
+  },
+  {
+    "query": "3월 Login 이벤트 주간 집계",
+    "expected_command": "insight",
+    "expected_event": "Login"
+  },
+  {
+    "query": "이번 달 Page View 월별 추이",
+    "expected_command": "insight",
+    "expected_event": "Page View"
+  },
+  {
+    "query": "Sign Up 이후 사용자 흐름 분석해줘",
+    "expected_command": "flow",
+    "expected_event": "Sign Up"
+  },
+  {
+    "query": "Login 전후 이벤트 플로우",
+    "expected_command": "flow",
+    "expected_event": "Login"
+  },
+  {
+    "query": "Purchase 이벤트 앞뒤 사용자 행동",
+    "expected_command": "flow",
+    "expected_event": "Purchase"
+  },
+  {
+    "query": "이번 달 Sign Up 리텐션 분석",
+    "expected_command": "retention",
+    "expected_event": "Sign Up"
+  },
+  {
+    "query": "가입 후 재방문율 계산해줘",
+    "expected_command": "retention",
+    "expected_event": "Sign Up"
+  },
+  {
+    "query": "Login 리텐션 주간 단위로 보여줘",
+    "expected_command": "retention",
+    "expected_event": "Login"
+  },
+  {
+    "query": "가입부터 결제까지 전환율 보여줘",
+    "expected_command": "funnel",
+    "expected_event": null
+  },
+  {
+    "query": "펀넬 123 분석해줘",
+    "expected_command": "funnel",
+    "expected_event": null
+  },
+  {
+    "query": "Sign Up 이벤트 이번 달 일별 카운트",
+    "expected_command": "insight",
+    "expected_event": "Sign Up"
+  },
+  {
+    "query": "오늘부터 한 달 전까지 Add to Cart 추이",
+    "expected_command": "insight",
+    "expected_event": "Add to Cart"
+  },
+  {
+    "query": "Checkout Complete 이번 주 통계",
+    "expected_command": "insight",
+    "expected_event": "Checkout Complete"
+  },
+  {
+    "query": "Profile Update 이벤트 3월 집계",
+    "expected_command": "insight",
+    "expected_event": "Profile Update"
+  },
+  {
+    "query": "Share 이벤트 플로우 분석",
+    "expected_command": "flow",
+    "expected_event": "Share"
+  },
+  {
+    "query": "Onboarding Complete 리텐션 보여줘",
+    "expected_command": "retention",
+    "expected_event": "Onboarding Complete"
+  },
+  {
+    "query": "Video Play 이벤트 지난 주 일별",
+    "expected_command": "insight",
+    "expected_event": "Video Play"
+  },
+  {
+    "query": "Search 이벤트 이번 달 주별 집계",
+    "expected_command": "insight",
+    "expected_event": "Search"
+  }
+]

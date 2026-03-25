@@ -36,6 +36,7 @@ mixpanel = "mixpanel_cli.main:cli"
 [tool.pytest.ini_options]
 testpaths = ["tests"]
 addopts = "-v"
+markers = ["golden: ask golden set accuracy tests"]
 
 [tool.coverage.run]
 source = ["mixpanel_cli"]

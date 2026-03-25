@@ -179,6 +179,58 @@ mixpanel lexicon edit-property \
 | `PROFILE_NOT_FOUND` | 프로파일 없음 | `mixpanel config init` 실행 |
 | `API_CHANGED` | 비공식 API 변경 감지 | 해당 명령 사용 중단, 공식 대안 확인 |
 
+## AI 자연어 쿼리 (Phase 2)
+
+> **설치:** `pip install mixpanel-cli[ai]` — `ANTHROPIC_API_KEY` 환경변수 필요
+
+```bash
+# 기본 자연어 쿼리
+mixpanel ask query "지난 달 Sign Up 이벤트 몇 건이야?" --quiet
+
+# 파라미터만 확인 (API 실행 안 함)
+mixpanel ask query "이번 주 Purchase 추이" --dry-run
+
+# 쿼리 구성 이유 포함
+mixpanel ask query "Login 리텐션 보여줘" --explain
+
+# 자연어 요약 없이 raw 데이터만
+mixpanel ask query "Sign Up 플로우" --no-summary
+
+# 이벤트 캐시 강제 갱신
+mixpanel ask query "Sign Up 통계" --refresh-cache
+```
+
+## Shell REPL (Phase 2)
+
+> **설치:** `pip install mixpanel-cli[shell]`
+
+```bash
+# REPL 시작
+mixpanel shell start
+
+# REPL 내부 명령
+use project 123456    # 프로젝트 변경
+use profile staging   # 프로파일 변경
+history               # 히스토리 출력
+clear                 # 화면 지우기
+exit                  # 종료
+```
+
+## Watch 폴링 알림 (Phase 2)
+
+```bash
+# Sign Up 이벤트를 60분마다 모니터링, 20% 하락 시 알림
+mixpanel watch start \
+  --event "Sign Up" \
+  --from-date 2026-03-01 \
+  --to-date 2026-03-26 \
+  --interval 60 \
+  --threshold-drop 20 \
+  --webhook https://hooks.example.com/alert
+
+# Ctrl+C로 종료
+```
+
 ## 에이전트 팁
 
 1. **항상 `--quiet` 사용** — 순수 JSON 데이터만 받아 파싱
