@@ -109,6 +109,50 @@ class MixpanelClient:
             return result
         return result.get("results", [])
 
+    # ── Dashboard (비공식 API) ─────────────────────────────────────────────────
+
+    def get_dashboards(self) -> list[dict]:
+        result = self._api.get(f"/api/app/projects/{self.project_id}/bookmarks")
+        return result if isinstance(result, list) else result.get("results", [result])
+
+    def get_dashboard(self, dashboard_id: str) -> dict:
+        return self._api.get(f"/api/app/projects/{self.project_id}/bookmarks/{dashboard_id}")
+
+    def create_dashboard(self, title: str, **kwargs) -> dict:
+        return self._api.post(
+            f"/api/app/projects/{self.project_id}/bookmarks",
+            json_data={"title": title, **kwargs},
+        )
+
+    def update_dashboard(self, dashboard_id: str, **kwargs) -> dict:
+        return self._api.patch(
+            f"/api/app/projects/{self.project_id}/bookmarks/{dashboard_id}",
+            json_data=kwargs,
+        )
+
+    def delete_dashboard(self, dashboard_id: str) -> dict:
+        return self._api.delete(
+            f"/api/app/projects/{self.project_id}/bookmarks/{dashboard_id}",
+        )
+
+    # ── Lexicon (비공식 API) ────────────────────────────────────────────────────
+
+    def get_lexicon_events(self) -> list[dict]:
+        result = self._api.get(f"/api/app/projects/{self.project_id}/schemas/events")
+        return result if isinstance(result, list) else result.get("results", [result])
+
+    def update_lexicon_event(self, event_name: str, **kwargs) -> dict:
+        return self._api.patch(
+            f"/api/app/projects/{self.project_id}/schemas/events/{event_name}",
+            json_data=kwargs,
+        )
+
+    def update_lexicon_property(self, event_name: str, property_name: str, **kwargs) -> dict:
+        return self._api.patch(
+            f"/api/app/projects/{self.project_id}/schemas/events/{event_name}/properties/{property_name}",
+            json_data=kwargs,
+        )
+
     # ── Export ────────────────────────────────────────────────────────────────
 
     def export_events(

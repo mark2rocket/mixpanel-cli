@@ -1,67 +1,65 @@
 {
   "project": "mixpanel-cli",
-  "version": "PRD v1.1",
-  "phase": "1a",
+  "version": "PRD v1.2",
+  "phase": "1b",
   "stories": [
     {
-      "id": "US-INIT",
-      "title": "프로젝트 초기화 및 패키지 구조",
-      "passes": true,
+      "id": "US-INIT", "title": "프로젝트 초기화 및 패키지 구조", "passes": true,
       "evidence": "pyproject.toml 생성, uv pip install --system -e .[dev] 성공, mixpanel --help 동작 확인"
     },
     {
-      "id": "US-INFRA",
-      "title": "공통 인프라 레이어 (constants, exceptions, models, types, formatter)",
-      "passes": true,
-      "evidence": "constants.py REGION_URLS/TTL 정의, exceptions.py 9개 클래스, models.py Pydantic v2, types.py DateType, formatter.py --quiet/--pretty 동작"
+      "id": "US-INFRA", "title": "공통 인프라 레이어", "passes": true,
+      "evidence": "constants/exceptions/models/types/formatter 구현 완료"
     },
     {
-      "id": "US-HTTP",
-      "title": "HTTP 클라이언트 (base + mixpanel)",
-      "passes": true,
-      "evidence": "client/base.py Basic 인증헤더, 429 지수백오프 재시도, 30s 타임아웃, client/mixpanel.py 리전 라우팅, insight/funnel/retention/flow/event_names/export_events 메서드 구현"
+      "id": "US-HTTP", "title": "HTTP 클라이언트", "passes": true,
+      "evidence": "base.py + mixpanel.py 구현, 429 재시도, 리전 라우팅"
     },
     {
-      "id": "US-AUTH",
-      "title": "인증 레이어 (profile + keychain)",
-      "passes": true,
-      "evidence": "keychain.py set/get_secret, RuntimeError → AuthError, profile.py CRUD, AuthContext 우선순위(CLI→env→keychain) 테스트 9개 통과"
+      "id": "US-AUTH", "title": "인증 레이어", "passes": true,
+      "evidence": "keychain + profile CRUD, AuthContext 우선순위 테스트 9개 통과"
     },
     {
-      "id": "US-CONFIG",
-      "title": "config 명령 그룹",
-      "passes": true,
-      "evidence": "config init/list/show/set/delete 모두 구현, 테스트 6개 통과"
+      "id": "US-CONFIG", "title": "config 명령 그룹", "passes": true,
+      "evidence": "config init/list/show/set/delete 구현, 테스트 6개 통과"
     },
     {
-      "id": "US-PROJECT",
-      "title": "project 명령 그룹",
-      "passes": true,
-      "evidence": "project info/list 구현, CLIResponse JSON 출력, 테스트 4개 통과"
+      "id": "US-PROJECT", "title": "project 명령 그룹", "passes": true,
+      "evidence": "project info/list 구현, 테스트 4개 통과"
     },
     {
-      "id": "US-ANALYTICS",
-      "title": "analytics 명령 그룹",
-      "passes": true,
-      "evidence": "insight/funnel/retention/flow 구현, --from-date/--to-date remapping, --format 옵션, 테스트 6개 통과"
+      "id": "US-ANALYTICS", "title": "analytics 명령 그룹", "passes": true,
+      "evidence": "insight/funnel/retention/flow 구현, 테스트 6개 통과"
     },
     {
-      "id": "US-EVENTS",
-      "title": "events 명령 그룹",
-      "passes": true,
-      "evidence": "events list/get/properties 구현, 페이지네이션, 테스트 4개 통과"
+      "id": "US-EVENTS", "title": "events 명령 그룹", "passes": true,
+      "evidence": "events list/get/properties 구현, 테스트 4개 통과"
     },
     {
-      "id": "US-EXPORT",
-      "title": "export 명령 그룹",
-      "passes": true,
-      "evidence": "export events 구현, --file, 30일 자동 청킹(3청크 검증), --event-name, stderr 진행 출력, 테스트 3개 통과"
+      "id": "US-EXPORT", "title": "export 명령 그룹", "passes": true,
+      "evidence": "export events 구현, 30일 청킹, 테스트 3개 통과"
     },
     {
-      "id": "US-TEST",
-      "title": "단위 테스트 및 SKILL.md",
+      "id": "US-TEST", "title": "단위 테스트 및 SKILL.md", "passes": true,
+      "evidence": "51/51 테스트 통과, 커버리지 81%, SKILL.md 존재"
+    },
+    {
+      "id": "US-DASHBOARD",
+      "title": "dashboard 명령 그룹 (비공식 API)",
       "passes": true,
-      "evidence": "51/51 테스트 통과, 커버리지 82%, SKILL.md 존재, conftest.py respx/keyring mock 픽스처"
+      "evidence": "dashboard list/get/create/update/delete 구현, MixpanelClient 메서드 5개 추가, stderr WARNING 출력, test_dashboard.py 5개 통과 (auth_error 포함)"
+    },
+    {
+      "id": "US-LEXICON",
+      "title": "lexicon 명령 그룹 (비공식 API)",
+      "passes": true,
+      "evidence": "lexicon list/edit-event/edit-property 구현, MixpanelClient 메서드 3개 추가, stderr WARNING 출력, test_lexicon.py 4개 통과 (auth_error 포함)"
+    },
+    {
+      "id": "US-1B-REGISTER",
+      "title": "main.py 등록 및 SKILL.md v1.1 업데이트",
+      "passes": true,
+      "evidence": "main.py add_command dashboard/lexicon 완료, mixpanel --help에 2개 명령 표시, SKILL.md dashboard/lexicon/API_CHANGED 에러코드 추가, 60/60 테스트 통과, 커버리지 84%"
     }
   ]
 }

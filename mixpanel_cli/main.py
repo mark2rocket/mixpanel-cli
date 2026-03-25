@@ -1,7 +1,7 @@
 """mixpanel-cli 진입점."""
 
 import click
-from mixpanel_cli.commands import config, project, analytics, events, export
+from mixpanel_cli.commands import config, project, analytics, events, export, dashboard, lexicon
 
 
 class AppContext:
@@ -50,6 +50,8 @@ cli.add_command(project.project_group, name="project")
 cli.add_command(analytics.analytics_group, name="analytics")
 cli.add_command(events.events_group, name="events")
 cli.add_command(export.export_group, name="export")
+cli.add_command(dashboard.dashboard_group, name="dashboard")
+cli.add_command(lexicon.lexicon_group, name="lexicon")
 
 
 if __name__ == "__main__":

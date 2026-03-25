@@ -123,7 +123,51 @@ mixpanel --region eu analytics insight --event "Sign Up" --from-date 2026-03-01 
 
 `--quiet` 플래그: `data` 값만 출력 (항상 유효한 JSON)
 
-## 에러 코드
+## Dashboard (비공식 API)
+
+> **주의:** 비공식 API 사용 — Mixpanel 업데이트 시 동작이 변경될 수 있음. stderr에 경고 출력.
+
+```bash
+# 대시보드 목록
+mixpanel dashboard list --quiet
+
+# 특정 대시보드 조회
+mixpanel dashboard get --id 123456 --quiet
+
+# 새 대시보드 생성
+mixpanel dashboard create --title "Weekly KPI"
+
+# 대시보드 수정
+mixpanel dashboard update --id 123456 --title "Monthly KPI"
+
+# 대시보드 삭제
+mixpanel dashboard delete --id 123456
+```
+
+API_CHANGED 에러 시 Mixpanel이 비공식 API를 변경한 것. 공식 지원 기능으로 대체 필요.
+
+## Lexicon (비공식 API)
+
+> **주의:** 비공식 API 사용 — 이벤트/프로퍼티 메타데이터 카탈로그.
+
+```bash
+# 이벤트 목록 + 설명 조회
+mixpanel lexicon list --quiet | jq '.[] | {name, description, status}'
+
+# 이벤트 메타데이터 수정
+mixpanel lexicon edit-event \
+  --event "Sign Up" \
+  --description "신규 사용자 가입 완료 이벤트" \
+  --status active
+
+# 프로퍼티 설명 수정
+mixpanel lexicon edit-property \
+  --event "Sign Up" \
+  --property "email" \
+  --description "가입 시 사용한 이메일"
+```
+
+## 에러 코드 (전체)
 
 | 코드 | 의미 | 해결 |
 |-----|------|------|
@@ -133,6 +177,7 @@ mixpanel --region eu analytics insight --event "Sign Up" --from-date 2026-03-01 
 | `RATE_LIMIT` | 요청 한도 초과 | 잠시 후 재시도 (자동 3회 재시도) |
 | `QUERY_ERROR` | 잘못된 쿼리 | 파라미터 검토 |
 | `PROFILE_NOT_FOUND` | 프로파일 없음 | `mixpanel config init` 실행 |
+| `API_CHANGED` | 비공식 API 변경 감지 | 해당 명령 사용 중단, 공식 대안 확인 |
 
 ## 에이전트 팁
 
