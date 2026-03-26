@@ -2,6 +2,13 @@
 
 This file provides guidance to Claude Code (claude.ai/code) when working with code in this repository.
 
+## 참고 문서 (작업 시 항상 참조)
+
+- **Mixpanel MCP 공식 문서**: https://docs.mixpanel.com/docs/mcp
+  - OAuth 2.0 PKCE 스펙, 동적 클라이언트 등록, 대시보드 API 엔드포인트
+- **Mixpanel API Reference**: https://developer.mixpanel.com/reference/overview
+  - 공식 REST API 엔드포인트, 파라미터, 응답 스키마
+
 ## Commands
 
 ```bash

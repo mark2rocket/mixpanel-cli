@@ -672,6 +672,13 @@ def action(ctx, param):
 
 ---
 
+## 참고 문서
+
+- [Mixpanel MCP 공식 문서](https://docs.mixpanel.com/docs/mcp) — OAuth 2.0 PKCE 스펙, 대시보드 API
+- [Mixpanel API Reference](https://developer.mixpanel.com/reference/overview) — REST API 엔드포인트 전체 레퍼런스
+
+---
+
 ## 라이선스
 
 MIT
