@@ -47,10 +47,18 @@ class APIChangedError(MixpanelCLIError):
     code = "API_CHANGED"
 
 
+class ServerError(MixpanelCLIError):
+    code = "SERVER_ERROR"
+
+
 HTTP_STATUS_TO_ERROR: dict[int, type[MixpanelCLIError]] = {
+    400: QueryError,
     401: AuthError,
     403: PermissionError,
     404: NotFoundError,
     429: RateLimitError,
-    400: QueryError,
+    500: ServerError,
+    502: ServerError,
+    503: ServerError,
+    504: ServerError,
 }
