@@ -1,5 +1,6 @@
 """Pydantic v2 데이터 모델."""
 
+from datetime import datetime, timezone
 from typing import Any, Literal, Optional
 from pydantic import BaseModel, Field
 
@@ -36,3 +37,18 @@ class AskResponse(CLIResponse):
 class ProfilesFile(BaseModel):
     profiles: dict[str, Profile] = Field(default_factory=dict)
     default: str = "default"
+
+
+class OAuthToken(BaseModel):
+    access_token: str
+    refresh_token: str
+    expires_at: datetime
+    scope: str
+    client_id: str
+    region: Literal["us", "eu", "in"] = "us"
+
+    def is_expired(self) -> bool:
+        """만료 5분 전부터 만료로 간주."""
+        from datetime import timedelta
+        now = datetime.now(timezone.utc)
+        return now >= (self.expires_at - timedelta(minutes=5))

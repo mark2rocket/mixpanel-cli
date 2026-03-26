@@ -1,7 +1,7 @@
 """mixpanel-cli 진입점."""
 
 import click
-from mixpanel_cli.commands import config, project, analytics, events, export, dashboard, lexicon, ask, shell, watch
+from mixpanel_cli.commands import config, project, analytics, events, export, dashboard, lexicon, ask, shell, watch, auth
 
 
 class AppContext:
@@ -55,6 +55,7 @@ cli.add_command(lexicon.lexicon_group, name="lexicon")
 cli.add_command(ask.ask_group, name="ask")
 cli.add_command(shell.shell_group, name="shell")
 cli.add_command(watch.watch_group, name="watch")
+cli.add_command(auth.auth_group, name="auth")
 
 
 if __name__ == "__main__":

@@ -1,5 +1,11 @@
 """공통 상수 정의."""
 
+MIXPANEL_DOMAIN_BY_REGION: dict[str, str] = {
+    "us": "mixpanel.com",
+    "eu": "eu.mixpanel.com",
+    "in": "in.mixpanel.com",
+}
+
 REGION_URLS: dict[str, dict[str, str]] = {
     "us": {
         "api": "https://mixpanel.com",

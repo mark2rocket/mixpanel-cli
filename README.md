@@ -88,7 +88,25 @@ pip install mixpanel-cli[all]
 
 ## 인증 설정
 
-### 방법 1: 환경변수 (권장)
+### 방법 1: OAuth 로그인 (권장 — 전체 권한)
+
+브라우저 기반 OAuth 2.0 PKCE 플로우로 Mixpanel 사용자 계정으로 직접 로그인합니다.
+대시보드 생성/수정 등 Service Account로는 불가능한 작업을 모두 사용할 수 있습니다.
+
+```bash
+# 브라우저가 자동으로 열립니다
+mixpanel auth login --project-id 123456
+
+# 인증 상태 확인
+mixpanel auth status
+
+# 로그아웃
+mixpanel auth logout
+```
+
+토큰은 OS keychain에 안전하게 저장되며, 만료 시 자동 갱신됩니다.
+
+### 방법 2: 환경변수 (CI/자동화 권장)
 
 ```bash
 export MIXPANEL_USERNAME="your-email@company.com"
@@ -96,18 +114,16 @@ export MIXPANEL_SECRET="your-service-account-secret"
 export MIXPANEL_PROJECT_ID="123456"
 ```
 
-### 방법 2: 프로파일 설정 (keychain 저장)
+### 방법 3: 프로파일 설정 (keychain 저장)
 
 ```bash
-mixpanel config set \
-  --username "your-email@company.com" \
-  --secret "your-service-account-secret" \
-  --project-id "123456"
+mixpanel config init
+# → username, secret, project_id, region 순서로 입력
 ```
 
 자격증명은 OS keychain(macOS Keychain / Linux Secret Service)에 안전하게 저장됩니다.
 
-### 방법 3: 명령줄 플래그
+### 방법 4: 명령줄 플래그
 
 ```bash
 mixpanel --project-id 123456 analytics insight --event "Sign Up" \
@@ -116,7 +132,9 @@ mixpanel --project-id 123456 analytics insight --event "Sign Up" \
 
 ### 인증 우선순위
 
-`CLI 플래그` > `환경변수` > `프로파일(keychain)`
+`CLI 플래그` > `환경변수` > `OAuth 토큰(keychain)` > `Service Account 프로파일`
+
+> OAuth 토큰이 있으면 자동으로 `Bearer` 헤더를 사용하고, 없으면 기존 `Basic` 인증으로 폴백합니다.
 
 ---
 

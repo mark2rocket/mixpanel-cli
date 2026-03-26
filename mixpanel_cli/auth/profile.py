@@ -95,6 +95,8 @@ class AuthContext:
         project_id: str | None = None,
         region: str | None = None,
     ):
+        self.use_oauth: bool = False
+        self.access_token: str | None = None
         self._resolve(profile_name, username, secret, project_id, region)
 
     def _resolve(self, profile_name, cli_username, cli_secret, cli_project_id, cli_region):
@@ -119,7 +121,35 @@ class AuthContext:
             self.region = cli_region or env_region
             return
 
-        # 3순위: 프로파일 + keychain
+        # 3순위: OAuth 토큰 (keychain)
+        from mixpanel_cli.auth.keychain import get_oauth_token, set_oauth_token
+        oauth_token = get_oauth_token(profile_name)
+        if oauth_token is not None:
+            if oauth_token.is_expired():
+                # 자동 갱신 시도
+                try:
+                    from mixpanel_cli.auth.oauth import refresh_token_request
+                    oauth_token = refresh_token_request(oauth_token, oauth_token.client_id, oauth_token.region)
+                    set_oauth_token(profile_name, oauth_token)
+                except Exception:
+                    pass  # 갱신 실패 시 Service Account로 폴백
+            if not oauth_token.is_expired():
+                resolved_project_id = cli_project_id or os.environ.get("MIXPANEL_PROJECT_ID", "")
+                if not resolved_project_id:
+                    raise AuthError(
+                        "OAuth 로그인 상태이지만 project_id가 없습니다. "
+                        "--project-id 플래그 또는 MIXPANEL_PROJECT_ID 환경변수를 설정하세요."
+                    )
+                self.use_oauth = True
+                self.access_token = oauth_token.access_token
+                self.project_id = resolved_project_id
+                self.region = cli_region or os.environ.get("MIXPANEL_REGION", oauth_token.region)
+                # Service Account 필드는 빈값으로 (OAuth 모드에서 불필요)
+                self.username = ""
+                self.secret = ""
+                return
+
+        # 4순위: 프로파일 + keychain
         try:
             profile = get_profile(profile_name)
         except ProfileNotFoundError:
@@ -142,6 +172,8 @@ class AuthContext:
 
     @property
     def auth_header(self) -> str:
+        if self.use_oauth and self.access_token:
+            return f"Bearer {self.access_token}"
         import base64
         token = base64.b64encode(f"{self.username}:{self.secret}".encode()).decode()
         return f"Basic {token}"

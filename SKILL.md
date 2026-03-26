@@ -17,19 +17,29 @@ pip install mixpanel-cli[all]
 
 ## 인증 설정
 
-### 대화형 (개발/로컬)
+### OAuth 로그인 (권장 — 전체 권한)
+```bash
+# 브라우저 OAuth 로그인 (대시보드 수정 등 전체 권한)
+mixpanel auth login --project-id 123456
+mixpanel auth status   # 상태 확인
+mixpanel auth logout   # 로그아웃
+```
+
+### Service Account (CI/에이전트 권장)
+```bash
+export MIXPANEL_USERNAME="svc-account@123456.mixpanel.com"
+export MIXPANEL_SECRET="your-service-account-secret"
+export MIXPANEL_PROJECT_ID="123456"
+```
+
+### 대화형 프로파일 (로컬 개발)
 ```bash
 mixpanel config init
 # → username, secret, project_id, region 순서로 입력
 ```
 
-### 환경변수 (CI/에이전트 권장)
-```bash
-export MIXPANEL_USERNAME="svc-account@123456.mixpanel.com"
-export MIXPANEL_SECRET="your-service-account-secret"
-export MIXPANEL_PROJECT_ID="123456"
-# config init 불필요
-```
+### 인증 우선순위
+`CLI 플래그` > `환경변수` > `OAuth 토큰` > `Service Account 프로파일`
 
 ## 에이전트 핵심 패턴
 

@@ -1,65 +1,55 @@
 {
   "project": "mixpanel-cli",
-  "version": "PRD v1.2",
-  "phase": "1b",
+  "version": "PRD v2.1",
+  "phase": "2-oauth",
   "stories": [
+    {"id": "US-INIT", "passes": true},
+    {"id": "US-INFRA", "passes": true},
+    {"id": "US-HTTP", "passes": true},
+    {"id": "US-AUTH", "passes": true},
+    {"id": "US-CONFIG", "passes": true},
+    {"id": "US-PROJECT", "passes": true},
+    {"id": "US-ANALYTICS", "passes": true},
+    {"id": "US-EVENTS", "passes": true},
+    {"id": "US-EXPORT", "passes": true},
+    {"id": "US-TEST", "passes": true},
+    {"id": "US-DASHBOARD", "passes": true},
+    {"id": "US-LEXICON", "passes": true},
+    {"id": "US-1B-REGISTER", "passes": true},
+    {"id": "US-CLAUDE-CLIENT", "passes": true},
+    {"id": "US-ASK", "passes": true},
+    {"id": "US-SHELL", "passes": true},
+    {"id": "US-WATCH", "passes": true},
+    {"id": "US-2-REGISTER", "passes": true},
     {
-      "id": "US-INIT", "title": "프로젝트 초기화 및 패키지 구조", "passes": true,
-      "evidence": "pyproject.toml 생성, uv pip install --system -e .[dev] 성공, mixpanel --help 동작 확인"
-    },
-    {
-      "id": "US-INFRA", "title": "공통 인프라 레이어", "passes": true,
-      "evidence": "constants/exceptions/models/types/formatter 구현 완료"
-    },
-    {
-      "id": "US-HTTP", "title": "HTTP 클라이언트", "passes": true,
-      "evidence": "base.py + mixpanel.py 구현, 429 재시도, 리전 라우팅"
-    },
-    {
-      "id": "US-AUTH", "title": "인증 레이어", "passes": true,
-      "evidence": "keychain + profile CRUD, AuthContext 우선순위 테스트 9개 통과"
-    },
-    {
-      "id": "US-CONFIG", "title": "config 명령 그룹", "passes": true,
-      "evidence": "config init/list/show/set/delete 구현, 테스트 6개 통과"
-    },
-    {
-      "id": "US-PROJECT", "title": "project 명령 그룹", "passes": true,
-      "evidence": "project info/list 구현, 테스트 4개 통과"
-    },
-    {
-      "id": "US-ANALYTICS", "title": "analytics 명령 그룹", "passes": true,
-      "evidence": "insight/funnel/retention/flow 구현, 테스트 6개 통과"
-    },
-    {
-      "id": "US-EVENTS", "title": "events 명령 그룹", "passes": true,
-      "evidence": "events list/get/properties 구현, 테스트 4개 통과"
-    },
-    {
-      "id": "US-EXPORT", "title": "export 명령 그룹", "passes": true,
-      "evidence": "export events 구현, 30일 청킹, 테스트 3개 통과"
-    },
-    {
-      "id": "US-TEST", "title": "단위 테스트 및 SKILL.md", "passes": true,
-      "evidence": "51/51 테스트 통과, 커버리지 81%, SKILL.md 존재"
-    },
-    {
-      "id": "US-DASHBOARD",
-      "title": "dashboard 명령 그룹 (비공식 API)",
+      "id": "US-OAUTH-MODELS",
+      "title": "OAuthToken 모델 + keychain OAuth 함수",
       "passes": true,
-      "evidence": "dashboard list/get/create/update/delete 구현, MixpanelClient 메서드 5개 추가, stderr WARNING 출력, test_dashboard.py 5개 통과 (auth_error 포함)"
+      "evidence": "models.py에 OAuthToken + is_expired() 추가. keychain.py에 set/get/delete_oauth_token 추가. 11개 OAuth 테스트 포함 91개 전체 통과."
     },
     {
-      "id": "US-LEXICON",
-      "title": "lexicon 명령 그룹 (비공식 API)",
+      "id": "US-OAUTH-CORE",
+      "title": "OAuth PKCE 핵심 로직 (oauth.py)",
       "passes": true,
-      "evidence": "lexicon list/edit-event/edit-property 구현, MixpanelClient 메서드 3개 추가, stderr WARNING 출력, test_lexicon.py 4개 통과 (auth_error 포함)"
+      "evidence": "mixpanel_cli/auth/oauth.py 신규 생성. generate_pkce, register_client(캐시), find_free_port, start_callback_server, exchange_code, refresh_token_request, run_login_flow 구현. constants.py에 MIXPANEL_DOMAIN_BY_REGION 추가."
     },
     {
-      "id": "US-1B-REGISTER",
-      "title": "main.py 등록 및 SKILL.md v1.1 업데이트",
+      "id": "US-OAUTH-AUTHCTX",
+      "title": "AuthContext OAuth 우선순위 통합",
       "passes": true,
-      "evidence": "main.py add_command dashboard/lexicon 완료, mixpanel --help에 2개 명령 표시, SKILL.md dashboard/lexicon/API_CHANGED 에러코드 추가, 60/60 테스트 통과, 커버리지 84%"
+      "evidence": "profile.py AuthContext에 use_oauth/access_token 속성 추가. 3순위 OAuth 토큰 확인 + 자동 refresh 로직. Bearer/Basic 헤더 분기. 기존 91개 테스트 모두 통과."
+    },
+    {
+      "id": "US-OAUTH-CMD",
+      "title": "auth 커맨드 그룹 (login/logout/status)",
+      "passes": true,
+      "evidence": "mixpanel_cli/commands/auth.py 신규 생성. auth login/logout/status 구현. main.py에 auth_group 등록."
+    },
+    {
+      "id": "US-OAUTH-TEST",
+      "title": "OAuth 단위 테스트",
+      "passes": true,
+      "evidence": "tests/unit/test_auth_oauth.py 11개 테스트 PASSED. PKCE 수학 검증, 동적 등록 mock, 토큰 만료, AuthContext Bearer/Basic 분기 모두 검증."
     }
   ]
 }
