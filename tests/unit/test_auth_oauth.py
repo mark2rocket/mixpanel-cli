@@ -58,7 +58,7 @@ def test_register_client_fresh(tmp_path, monkeypatch):
     )
 
     from mixpanel_cli.auth.oauth import register_client
-    client_id = register_client(region="us")
+    client_id = register_client(redirect_uri="http://127.0.0.1:7777/callback", region="us")
     assert client_id == "test-client-123"
 
     # 캐시 파일 생성 확인
@@ -74,12 +74,12 @@ def test_register_client_cached(tmp_path, monkeypatch):
     )
 
     cache_file = tmp_path / "oauth_client_us.json"
-    cache_file.write_text(json.dumps({"client_id": "cached-client-456"}))
+    cache_file.write_text(json.dumps({"client_id": "cached-client-456", "redirect_uri": "http://127.0.0.1:7777/callback"}))
 
     from mixpanel_cli.auth.oauth import register_client
     with respx.mock:
         # API 호출이 없어야 함 (mock에 route 없으므로 호출 시 에러)
-        client_id = register_client(region="us")
+        client_id = register_client(redirect_uri="http://127.0.0.1:7777/callback", region="us")
 
     assert client_id == "cached-client-456"
 

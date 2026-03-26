@@ -49,16 +49,16 @@ def _client_cache_path(region: str) -> Path:
     return _CLIENT_CACHE_DIR / f"oauth_client_{region}.json"
 
 
-def register_client(region: str = "us") -> str:
+def register_client(redirect_uri: str, region: str = "us") -> str:
     """동적 클라이언트 등록 → client_id 반환.
 
-    이미 캐시된 client_id가 있으면 API 재호출 없이 반환.
+    redirect_uri별로 캐시 — 동일 URI면 재등록 없이 반환.
     """
     cache_path = _client_cache_path(region)
     if cache_path.exists():
         try:
             data = json.loads(cache_path.read_text())
-            if "client_id" in data:
+            if data.get("redirect_uri") == redirect_uri and "client_id" in data:
                 return data["client_id"]
         except Exception:
             pass
@@ -70,7 +70,7 @@ def register_client(region: str = "us") -> str:
         "grant_types": ["authorization_code", "refresh_token"],
         "response_types": ["code"],
         "token_endpoint_auth_method": "none",
-        "redirect_uris": [],  # 동적으로 추가됨
+        "redirect_uris": [redirect_uri],
     }
 
     response = httpx.post(url, json=payload, timeout=15)
@@ -79,7 +79,7 @@ def register_client(region: str = "us") -> str:
     client_id = data["client_id"]
 
     _CLIENT_CACHE_DIR.mkdir(parents=True, exist_ok=True)
-    cache_path.write_text(json.dumps({"client_id": client_id}))
+    cache_path.write_text(json.dumps({"client_id": client_id, "redirect_uri": redirect_uri}))
     cache_path.chmod(0o600)
     return client_id
 
@@ -213,11 +213,11 @@ def _parse_token_response(payload: dict, client_id: str, region: str = "us") -> 
 
 def run_login_flow(region: str = "us", scopes: str = _DEFAULT_SCOPES) -> OAuthToken:
     """브라우저 기반 PKCE 로그인 플로우 실행 → OAuthToken 반환."""
-    client_id = register_client(region)
-    code_verifier, code_challenge = generate_pkce()
-    state = secrets.token_urlsafe(16)
     port = find_free_port()
     redirect_uri = f"http://127.0.0.1:{port}/callback"
+    client_id = register_client(redirect_uri=redirect_uri, region=region)
+    code_verifier, code_challenge = generate_pkce()
+    state = secrets.token_urlsafe(16)
 
     domain = MIXPANEL_DOMAIN_BY_REGION.get(region, "mixpanel.com")
     params = {
