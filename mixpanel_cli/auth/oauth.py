@@ -20,7 +20,7 @@ from mixpanel_cli.models import OAuthToken
 
 _DEFAULT_SCOPES = (
     "projects analysis events insights segmentation retention "
-    "data:read funnels flows data_definitions dashboard_reports bookmarks"
+    "data:read funnels flows data_definitions dashboard_reports bookmarks user_details"
 )
 _CLIENT_CACHE_DIR = Path(os.path.expanduser("~/.mixpanel"))
 
